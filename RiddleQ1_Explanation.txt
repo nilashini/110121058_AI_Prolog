@@ -1,0 +1,46 @@
+	Riddle:
+
+"Brothers and sisters have I none, but that man’s father is my father’s son."
+
+	Goal: 
+Determine who "that man" is.
+
+	Understanding the Riddle
+"Brothers and sisters have I none":
+
+The speaker has no siblings.
+"That man’s father is my father’s son":
+
+"My father's son": Since the speaker has no siblings, this can only refer to the speaker themselves.
+Therefore, "that man’s father" is the speaker.
+Conclusion:
+
+"That man" is the speaker's son.
+
+	Prolog Representation
+We'll represent the family relationships using Prolog predicates and then encode the constraints from the riddle.
+
+	Predicates Used:
+male/1: Defines male individuals.
+parent/2: Defines parent-child relationships.
+father/2: Derived from parent/2 and male/1.
+son/2: Derived from parent/2 and male/1.
+no_siblings/1: Ensures a person has no siblings.
+solve_riddle/1: Determines who "that man" is based on the riddle.
+Prolog Code:
+Create a file named riddle.pl and add the following code:
+
+	Explanation of the Code:
+
+	Facts:
+male(john)., male(speaker)., male(david).: Define John, the speaker, and David as males.
+parent(john, speaker).: John is the father of the speaker.
+parent(speaker, david).: The speaker is the father of David.
+
+	Rules:
+father(X, Y) :- parent(X, Y), male(X).: X is the father of Y if X is a parent of Y and X is male.
+son(Y, X) :- parent(X, Y), male(Y).: Y is the son of X if X is a parent of Y and Y is male.
+no_siblings(speaker) :- \+ (parent(john, Sibling), parent(john, speaker), Sibling \= speaker).: The speaker has no siblings if there does not exist another child (Sibling) of John who is not the speaker.
+
+	Riddle Solver:
+solve_riddle(Man) :- no_siblings(speaker), father(speaker, Man).: To solve the riddle, ensure the speaker has no siblings and identify Man as the speaker's son.
